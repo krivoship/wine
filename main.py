@@ -5,9 +5,11 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 import pandas
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+FOUNDING_DATE = 1920
+
 
 def main():
-    age = datetime.date.today().year - 1920
+    age = datetime.date.today().year - FOUNDING_DATE
 
     drinks = defaultdict(list)
     drinks_info = pandas.read_excel('wine3.xlsx')
