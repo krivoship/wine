@@ -12,20 +12,19 @@ FOUNDING_DATE = 1920
 
 def main():
     load_dotenv()
-    drinks_info = os.getenv("DRINKS_INFO")
+    drinks = os.getenv("DRINKS")
     age = datetime.date.today().year - FOUNDING_DATE
 
-    drinks = defaultdict(list)
-    drinks_info = pandas.read_excel(drinks_info)
-    drinks_info = drinks_info.fillna('')
+    drinks_categories = defaultdict(list)
+    drinks = pandas.read_excel(drinks).fillna('')
     properties = ['Название', 'Сорт', 'Цена', 'Картинка', 'Акция']
     counter = 0
-    while counter < len(drinks_info):
-        current_drink = {}
+    while counter < len(drinks):
+        drink = {}
         for property in properties:
-            current_drink[property] = drinks_info.iloc[counter][property]
+            drink[property] = drinks.iloc[counter][property]
 
-        drinks[drinks_info.iloc[counter]['Категория']].append(current_drink)
+        drinks_categories[drinks.iloc[counter]['Категория']].append(drink)
         counter += 1
 
     env = Environment(
@@ -37,7 +36,7 @@ def main():
 
     rendered_page = template.render(
         age=age,
-        drinks=drinks,
+        drinks_categories=drinks_categories,
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
