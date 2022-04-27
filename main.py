@@ -1,18 +1,22 @@
 import datetime
+import os
 from collections import defaultdict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 import pandas
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from dotenv import load_dotenv
 
 FOUNDING_DATE = 1920
 
 
 def main():
+    load_dotenv()
+    drinks_info = os.getenv("DRINKS_INFO")
     age = datetime.date.today().year - FOUNDING_DATE
 
     drinks = defaultdict(list)
-    drinks_info = pandas.read_excel('wine3.xlsx')
+    drinks_info = pandas.read_excel(drinks_info)
     drinks_info = drinks_info.fillna('')
     properties = ['Название', 'Сорт', 'Цена', 'Картинка', 'Акция']
     counter = 0
