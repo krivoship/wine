@@ -15,17 +15,12 @@ def main():
     drinks = os.getenv("DRINKS")
     age = datetime.date.today().year - FOUNDING_DATE
 
+    categories = pandas.read_excel(drinks)['Категория'].to_list()
+    properties = pandas.read_excel(drinks, index_col='Категория') \
+        .fillna('').to_dict('records')
     drinks_categories = defaultdict(list)
-    drinks = pandas.read_excel(drinks).fillna('')
-    properties = ['Название', 'Сорт', 'Цена', 'Картинка', 'Акция']
-    counter = 0
-    while counter < len(drinks):
-        drink = {}
-        for property in properties:
-            drink[property] = drinks.iloc[counter][property]
-
-        drinks_categories[drinks.iloc[counter]['Категория']].append(drink)
-        counter += 1
+    for category, property in zip(categories, properties):
+        drinks_categories[category].append(property)
 
     env = Environment(
         loader=FileSystemLoader('.'),
