@@ -15,12 +15,12 @@ def main():
     drinks = os.getenv("DRINKS")
     age = datetime.date.today().year - FOUNDING_DATE
 
-    categories = pandas.read_excel(drinks)['Категория'].to_list()
-    properties = pandas.read_excel(drinks, index_col='Категория') \
+    drinks_categories = pandas.read_excel(drinks)['Категория'].to_list()
+    drinks_properties = pandas.read_excel(drinks, index_col='Категория') \
         .fillna('').to_dict('records')
-    drinks_categories = defaultdict(list)
-    for category, property in zip(categories, properties):
-        drinks_categories[category].append(property)
+    drinks_by_category = defaultdict(list)
+    for category, property in zip(drinks_categories, drinks_properties):
+        drinks_by_category[category].append(property)
 
     env = Environment(
         loader=FileSystemLoader('.'),
@@ -31,7 +31,7 @@ def main():
 
     rendered_page = template.render(
         age=age,
-        drinks_categories=drinks_categories,
+        drinks_by_category=drinks_by_category,
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
